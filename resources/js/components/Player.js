@@ -26,7 +26,7 @@ function Player() {
         <div
             className={`player ${player.hasCoffee ? "bg-green-900" : ""}`}
             style={{
-                transform: `translate(${3 * player.x}rem, ${1.5 *
+                transform: `translate(${1.5 * player.x}rem, ${1.5 *
                     player.y}rem) rotate(${rotate}) ${
                     player.hasCompleted ? "scale(2)" : ""
                 }`
