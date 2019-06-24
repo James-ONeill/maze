@@ -1,17 +1,16 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ReactDOM from "react-dom";
 import moment from "moment";
 
 import "./bootstrap";
-import Maze from "./components/Maze";
-import Timer from "./components/Timer";
-import Player from "./components/Player";
-import Controls from "./components/Controls";
+import GameScreen from "./components/GameScreen";
 import MazeContext from "./context/MazeContext";
 import { TimerProvider } from "./context/TimerContext";
 import { PlayerProvider } from "./context/PlayerContext";
 
 function App() {
+    const [screen, setScreen] = useState("new-player");
+
     const maze = useContext(MazeContext);
 
     const [timer, setTimer] = useState({
@@ -43,10 +42,25 @@ function App() {
     }
 
     const [player, setPlayer] = useState({
+        name: "James",
         x: maze.entrance.x,
         y: maze.entrance.y,
         direction: "up"
     });
+
+    useEffect(() => {
+        try {
+            const name = localStorage.getItem("name");
+            if (!name) return;
+
+            setPlayer({ ...player, name });
+            setScreen("maze");
+        } catch (e) {}
+    });
+
+    function setName(name) {
+        setPlayer({ ...player, name });
+    }
 
     const move = direction => () => {
         if (player.hasCompleted) return;
@@ -71,7 +85,13 @@ function App() {
             default:
         }
 
-        if (!maze.tiles[newPlayer.y][newPlayer.x]) {
+        if (
+            !maze.tiles[newPlayer.y] ||
+            !maze.tiles[newPlayer.y][newPlayer.x] ||
+            !maze.traversableTiles.includes(
+                maze.tiles[newPlayer.y][newPlayer.x].type
+            )
+        ) {
             setPlayer({ ...player, direction });
             return;
         }
@@ -85,8 +105,8 @@ function App() {
 
         if (
             player.hasCoffee &&
-            newPlayer.x == maze.entrance.x &&
-            newPlayer.y == maze.entrance.y
+            newPlayer.x == maze.exit.x &&
+            newPlayer.y == maze.exit.y
         ) {
             newPlayer.hasCompleted = true;
             stopTimer();
@@ -100,16 +120,8 @@ function App() {
             <TimerProvider
                 value={{ ...timer, startTimer, stopTimer, timeElapsed }}
             >
-                <PlayerProvider value={{ ...player, move }}>
-                    <Timer />
-                    <div
-                        className="mx-auto relative"
-                        style={{ width: "fit-content" }}
-                    >
-                        <Maze />
-                        <Player />
-                    </div>
-                    <Controls />
+                <PlayerProvider value={{ ...player, move, setName }}>
+                    <GameScreen />
                 </PlayerProvider>
             </TimerProvider>
         </div>

@@ -4,8 +4,8 @@
 
 .maze {
     display: grid;
-    grid-template-columns: repeat(8, 3rem);
-    grid-template-rows: repeat(8, 3rem);
+    grid-template-columns: repeat(16, 3rem);
+    grid-template-rows: repeat(16, 3rem);
     width: fit-content;
 }
 

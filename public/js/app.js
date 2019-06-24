@@ -61540,13 +61540,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _components_Maze__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Maze */ "./resources/js/components/Maze.js");
-/* harmony import */ var _components_Timer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Timer */ "./resources/js/components/Timer.js");
-/* harmony import */ var _components_Player__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Player */ "./resources/js/components/Player.js");
-/* harmony import */ var _components_Controls__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Controls */ "./resources/js/components/Controls.js");
-/* harmony import */ var _context_MazeContext__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./context/MazeContext */ "./resources/js/context/MazeContext.js");
-/* harmony import */ var _context_TimerContext__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./context/TimerContext */ "./resources/js/context/TimerContext.js");
-/* harmony import */ var _context_PlayerContext__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./context/PlayerContext */ "./resources/js/context/PlayerContext.js");
+/* harmony import */ var _components_GameScreen__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/GameScreen */ "./resources/js/components/GameScreen.js");
+/* harmony import */ var _context_MazeContext__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./context/MazeContext */ "./resources/js/context/MazeContext.js");
+/* harmony import */ var _context_TimerContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./context/TimerContext */ "./resources/js/context/TimerContext.js");
+/* harmony import */ var _context_PlayerContext__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./context/PlayerContext */ "./resources/js/context/PlayerContext.js");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -61568,19 +61565,21 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
-
-
 function App() {
-  var maze = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_MazeContext__WEBPACK_IMPORTED_MODULE_8__["default"]);
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])("new-player"),
+      _useState2 = _slicedToArray(_useState, 2),
+      screen = _useState2[0],
+      setScreen = _useState2[1];
 
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+  var maze = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_MazeContext__WEBPACK_IMPORTED_MODULE_5__["default"]);
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
     startTime: null,
     endTime: null
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      timer = _useState2[0],
-      setTimer = _useState2[1];
+      _useState4 = _slicedToArray(_useState3, 2),
+      timer = _useState4[0],
+      setTimer = _useState4[1];
 
   function timeElapsed() {
     var compare = timer.endTime ? timer.endTime : moment__WEBPACK_IMPORTED_MODULE_2___default()();
@@ -61601,14 +61600,32 @@ function App() {
     }));
   }
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+    name: "James",
     x: maze.entrance.x,
     y: maze.entrance.y,
     direction: "up"
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      player = _useState4[0],
-      setPlayer = _useState4[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      player = _useState6[0],
+      setPlayer = _useState6[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    try {
+      var name = localStorage.getItem("name");
+      if (!name) return;
+      setPlayer(_objectSpread({}, player, {
+        name: name
+      }));
+      setScreen("maze");
+    } catch (e) {}
+  });
+
+  function setName(name) {
+    setPlayer(_objectSpread({}, player, {
+      name: name
+    }));
+  }
 
   var move = function move(direction) {
     return function () {
@@ -61637,7 +61654,7 @@ function App() {
         default:
       }
 
-      if (!maze.tiles[newPlayer.y][newPlayer.x]) {
+      if (!maze.tiles[newPlayer.y] || !maze.tiles[newPlayer.y][newPlayer.x] || !maze.traversableTiles.includes(maze.tiles[newPlayer.y][newPlayer.x].type)) {
         setPlayer(_objectSpread({}, player, {
           direction: direction
         }));
@@ -61648,7 +61665,7 @@ function App() {
         newPlayer.hasCoffee = true;
       }
 
-      if (player.hasCoffee && newPlayer.x == maze.entrance.x && newPlayer.y == maze.entrance.y) {
+      if (player.hasCoffee && newPlayer.x == maze.exit.x && newPlayer.y == maze.exit.y) {
         newPlayer.hasCompleted = true;
         stopTimer();
       }
@@ -61659,22 +61676,18 @@ function App() {
     };
   };
 
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_context_TimerContext__WEBPACK_IMPORTED_MODULE_9__["TimerProvider"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_context_TimerContext__WEBPACK_IMPORTED_MODULE_6__["TimerProvider"], {
     value: _objectSpread({}, timer, {
       startTimer: startTimer,
       stopTimer: stopTimer,
       timeElapsed: timeElapsed
     })
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_context_PlayerContext__WEBPACK_IMPORTED_MODULE_10__["PlayerProvider"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_context_PlayerContext__WEBPACK_IMPORTED_MODULE_7__["PlayerProvider"], {
     value: _objectSpread({}, player, {
-      move: move
+      move: move,
+      setName: setName
     })
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Timer__WEBPACK_IMPORTED_MODULE_5__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "mx-auto relative",
-    style: {
-      width: "fit-content"
-    }
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Maze__WEBPACK_IMPORTED_MODULE_4__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Player__WEBPACK_IMPORTED_MODULE_6__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Controls__WEBPACK_IMPORTED_MODULE_7__["default"], null))));
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_GameScreen__WEBPACK_IMPORTED_MODULE_4__["default"], null))));
 }
 
 var rootElement = document.getElementById("root");
@@ -61746,6 +61759,40 @@ function Controls() {
 
 /***/ }),
 
+/***/ "./resources/js/components/GameScreen.js":
+/*!***********************************************!*\
+  !*** ./resources/js/components/GameScreen.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Maze__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Maze */ "./resources/js/components/Maze.js");
+/* harmony import */ var _Timer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Timer */ "./resources/js/components/Timer.js");
+/* harmony import */ var _Player__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Player */ "./resources/js/components/Player.js");
+/* harmony import */ var _Controls__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Controls */ "./resources/js/components/Controls.js");
+
+
+
+
+
+
+function GameScreen() {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Timer__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "mx-auto relative",
+    style: {
+      width: "fit-content"
+    }
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Maze__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Player__WEBPACK_IMPORTED_MODULE_3__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Controls__WEBPACK_IMPORTED_MODULE_4__["default"], null));
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (GameScreen);
+
+/***/ }),
+
 /***/ "./resources/js/components/Maze.js":
 /*!*****************************************!*\
   !*** ./resources/js/components/Maze.js ***!
@@ -61781,7 +61828,7 @@ function Maze() {
     return rowTiles.map(function (tile, col) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "".concat(row, "-").concat(col),
-        className: "tile ".concat(isEntrance(col, row) ? "bg-blue-300" : "", " ").concat(isCoffeeMachine(col, row) ? "bg-pink-300" : ""),
+        className: "tile ".concat(tile.className),
         "data-obstacle": !tile
       });
     });
@@ -61910,18 +61957,78 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MazeConsumer", function() { return MazeConsumer; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
-var tiles = [[false, false, false, false, false, false, true, false], [false, false, false, false, true, false, true, false], [false, true, true, true, true, true, true, false], [false, false, false, false, true, false, false, true], [false, true, true, true, true, true, true, false], [false, false, true, false, false, false, false, false], [true, true, true, true, true, true, true, true], [false, false, true, false, true, false, true, false]];
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+function tile(settings) {
+  return _objectSpread({
+    type: 'tile',
+    className: ""
+  }, settings);
+}
+
+function shelf() {
+  return tile({
+    type: 'wall',
+    className: "bg-gray-900"
+  });
+}
+
+function block() {
+  return tile({
+    type: 'obstacle',
+    className: "bg-orange-500"
+  });
+}
+
+function coffee() {
+  return tile({
+    type: 'coffee-machine',
+    className: 'bg-red-500'
+  });
+}
+
+function enter() {
+  return tile({
+    type: 'entrance',
+    className: "bg-pink-500"
+  });
+}
+
+function exit() {
+  return tile({
+    type: 'exit',
+    className: "bg-blue-500"
+  });
+}
+
+var tiles = [[shelf(), shelf(), coffee(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf()], [shelf(), tile(), tile(), tile(), tile(), block(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), tile(), shelf()], [shelf(), tile(), shelf(), block(), shelf(), tile(), shelf(), block(), shelf(), tile(), shelf(), tile(), tile(), shelf(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), shelf(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), shelf()], [shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), shelf(), shelf(), block(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), shelf(), tile(), shelf(), tile(), tile(), shelf(), tile(), shelf()], [shelf(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), tile(), shelf()], [shelf(), block(), shelf(), block(), shelf(), tile(), shelf(), block(), shelf(), block(), shelf(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), tile(), shelf()], [shelf(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), tile(), tile(), tile(), shelf()], [shelf(), shelf(), shelf(), enter(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), exit(), shelf(), shelf(), shelf()]];
+
+function getCoordinates(type) {
+  return tiles.map(function (cols, row) {
+    var col = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["findIndex"])(cols, ['type', type]);
+    return {
+      x: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["findIndex"])(cols, ['type', type]),
+      y: row
+    };
+  }).filter(function (_ref) {
+    var x = _ref.x;
+    return x > -1;
+  })[0];
+}
+
 var MazeContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({
   tiles: tiles,
-  entrance: {
-    x: 2,
-    y: 7
-  },
-  coffeeMachine: {
-    x: 6,
-    y: 0
-  }
+  entrance: getCoordinates('entrance'),
+  exit: getCoordinates('exit'),
+  coffeeMachine: getCoordinates('coffee-machine'),
+  traversableTiles: ['tile', 'entrance', 'exit', 'coffee-machine']
 });
 var MazeProvider = MazeContext.Provider;
 var MazeConsumer = MazeContext.Consumer;

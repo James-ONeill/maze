@@ -18,9 +18,7 @@ function Maze() {
                 rowTiles.map((tile, col) => (
                     <div
                         key={`${row}-${col}`}
-                        className={`tile ${
-                            isEntrance(col, row) ? "bg-blue-300" : ""
-                        } ${isCoffeeMachine(col, row) ? "bg-pink-300" : ""}`}
+                        className={`tile ${tile.className}`}
                         data-obstacle={!tile}
                     />
                 ))
