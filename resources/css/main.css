@@ -1,0 +1,33 @@
+@tailwind base;
+
+@tailwind components;
+
+.maze {
+    display: grid;
+    grid-template-columns: repeat(8, 3rem);
+    grid-template-rows: repeat(8, 3rem);
+    width: fit-content;
+}
+
+.tile {
+  background: #c3c3c3;
+}
+
+.tile[data-obstacle="true"] {
+    background: #333;
+}
+
+.player {
+    align-items: center;
+    background: red;
+    border-radius: 50%;
+    display: flex;
+    height: 3rem;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 3rem;
+}
+
+@tailwind utilities;
