@@ -9,7 +9,9 @@
 
     <script defer src="{{ mix('js/app.js') }}"></script>
 
-    <title>Document</title>
+    <title>Coffee-to-go – Path to Purchase</title>
+
+    <meta name="description" content="How fast can you grab your coffee and exit the store? Test your skills to find out.">
 </head>
 <body>
     @yield('content')
