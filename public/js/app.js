@@ -61881,7 +61881,7 @@ function Player() {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "player ".concat(player.hasCoffee ? "bg-green-900" : ""),
     style: {
-      transform: "translate(".concat(3 * player.x, "rem, ").concat(3 * player.y, "rem) rotate(").concat(rotate, ") ").concat(player.hasCompleted ? "scale(2)" : "")
+      transform: "translate(".concat(3 * player.x, "rem, ").concat(1.5 * player.y, "rem) rotate(").concat(rotate, ") ").concat(player.hasCompleted ? "scale(2)" : "")
     }
   }, "P");
 }
