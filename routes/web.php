@@ -12,3 +12,6 @@
 */
 
 Route::view('/', 'maze');
+
+Route::get('times', 'TimesController@index');
+Route::post('times', 'TimesController@store');

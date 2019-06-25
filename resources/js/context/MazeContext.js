@@ -60,7 +60,7 @@ const tiles = [
     [shelf(), block(), shelf(),  block(), shelf(), tile(),  shelf(), block(), shelf(), block(), shelf(), tile(),  tile(),  tile(),  tile(),  shelf()],
     [shelf(), tile(),  shelf(),  tile(),  shelf(), tile(),  shelf(), tile(),  shelf(), tile(),  shelf(), tile(),  shelf(), shelf(), tile(),  shelf()],
     [shelf(), tile(),  tile(),   tile(),  tile(),  tile(),  tile(),  tile(),  shelf(), tile(),  tile(),  tile(),  tile(),  tile(),  tile(),  shelf()],
-    [shelf(), shelf(), shelf(),  enter(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), exit(),  shelf(), shelf(), shelf()],
+    [shelf(), shelf(), shelf(),  exit(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), enter(),  shelf(), shelf(), shelf()],
 ];
 
 function getCoordinates(type) {
