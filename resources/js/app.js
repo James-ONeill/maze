@@ -4,6 +4,8 @@ import moment from "moment";
 
 import "./bootstrap";
 import GameScreen from "./components/GameScreen";
+import StartGameScreen from "./components/StartGameScreen";
+import LeaderboardScreen from "./components/LeaderboardScreen";
 import MazeContext from "./context/MazeContext";
 import { TimerProvider } from "./context/TimerContext";
 import { PlayerProvider } from "./context/PlayerContext";
@@ -45,18 +47,27 @@ function App() {
         name: "James",
         x: maze.entrance.x,
         y: maze.entrance.y,
-        direction: "up"
+        direction: "up",
+        uuid: null,
     });
+
+    function createPlayer(name) {
+        setPlayer({ ...player, name });
+    }
 
     useEffect(() => {
         try {
             const name = localStorage.getItem("name");
-            if (!name) return;
+            let uuid = localStorage.getItem("uuid");
 
-            setPlayer({ ...player, name });
-            setScreen("maze");
+            if (!uuid) {
+                uuid = require('uuid/v4')();
+                localStorage.setItem("uuid", uuid);
+            }
+
+            setPlayer({ ...player, name, uuid });
         } catch (e) {}
-    });
+    }, []);
 
     function setName(name) {
         setPlayer({ ...player, name });
@@ -115,13 +126,31 @@ function App() {
         setPlayer({ ...newPlayer, direction });
     };
 
+    useEffect(() => {
+        if (! player.hasCompleted) return;
+
+        async function postData(time) {
+            const response = await window.axios.post('/times', {
+                uuid: player.uuid,
+                name: player.name,
+                minutes: time.minutes(),
+                seconds: time.seconds(),
+                milliseconds: time.milliseconds(),
+            });
+        }
+
+        postData(timeElapsed());
+    }, [player.hasCompleted])
+
     return (
         <div>
             <TimerProvider
                 value={{ ...timer, startTimer, stopTimer, timeElapsed }}
             >
                 <PlayerProvider value={{ ...player, move, setName }}>
-                    <GameScreen />
+                    {screen === 'new-player' && <StartGameScreen createPlayer={createPlayer} />}
+                    {screen === 'maze' && <GameScreen />}
+                    {screen === 'leaderboard' && <LeaderboardScreen />}
                 </PlayerProvider>
             </TimerProvider>
         </div>

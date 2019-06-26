@@ -2,6 +2,35 @@
 
 @tailwind components;
 
+.frame-border {
+    position: relative;
+    z-index: -1;
+}
+.frame-border::before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 6px;
+    bottom: 6px;
+    left: 6px;
+    right: 6px;
+    border: 6px solid #e04000;
+    z-index: 1;
+}
+
+.frame-border::after {
+    border: 6px solid #712c11;
+    bottom: 6px;
+    content: '';
+    display: block;
+    left: 6px;
+    position: fixed;
+    right: 6px;
+    top: 6px;
+    transform: translate(3px, 3px);
+    z-index: 0;
+}
+
 .maze {
     display: grid;
     grid-template-columns: repeat(16, 1.5rem);
@@ -10,7 +39,7 @@
 }
 
 .tile {
-  background: #c3c3c3;
+    background: #c3c3c3;
 }
 
 .tile[data-obstacle="true"] {
@@ -31,3 +60,15 @@
 }
 
 @tailwind utilities;
+
+.text-shadow-white {
+    text-shadow: -2px 2px white;
+}
+
+.text-shadow-dark-orange {
+    text-shadow: 3px 3px #b12d00;
+}
+
+.text-shadow-dark-brown {
+    text-shadow: 3px 3px #230a00;
+}
