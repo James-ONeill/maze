@@ -13,6 +13,10 @@ import { PlayerProvider } from "./context/PlayerContext";
 function App() {
     const [screen, setScreen] = useState("new-player");
 
+    function showLeaderboard() {
+        setScreen("leaderboard");
+    }
+
     const maze = useContext(MazeContext);
 
     const [timer, setTimer] = useState({
@@ -48,24 +52,30 @@ function App() {
         x: maze.entrance.x,
         y: maze.entrance.y,
         direction: "up",
-        uuid: null,
+        uuid: null
     });
 
-    function createPlayer(name) {
-        setPlayer({ ...player, name });
+    function createPlayer({ name, email }) {
+        setPlayer({ ...player, name, email });
+
+        localStorage.setItem("name", name);
+        localStorage.setItem("email", email);
+
+        setScreen("maze");
     }
 
     useEffect(() => {
         try {
             const name = localStorage.getItem("name");
+            const email = localStorage.getItem("email");
             let uuid = localStorage.getItem("uuid");
 
             if (!uuid) {
-                uuid = require('uuid/v4')();
+                uuid = require("uuid/v4")();
                 localStorage.setItem("uuid", uuid);
             }
 
-            setPlayer({ ...player, name, uuid });
+            setPlayer({ ...player, name, email, uuid });
         } catch (e) {}
     }, []);
 
@@ -127,20 +137,20 @@ function App() {
     };
 
     useEffect(() => {
-        if (! player.hasCompleted) return;
+        if (!player.hasCompleted) return;
 
         async function postData(time) {
-            const response = await window.axios.post('/times', {
+            const response = await window.axios.post("/times", {
                 uuid: player.uuid,
                 name: player.name,
                 minutes: time.minutes(),
                 seconds: time.seconds(),
-                milliseconds: time.milliseconds(),
+                milliseconds: time.milliseconds()
             });
         }
 
         postData(timeElapsed());
-    }, [player.hasCompleted])
+    }, [player.hasCompleted]);
 
     return (
         <div>
@@ -148,9 +158,16 @@ function App() {
                 value={{ ...timer, startTimer, stopTimer, timeElapsed }}
             >
                 <PlayerProvider value={{ ...player, move, setName }}>
-                    {screen === 'new-player' && <StartGameScreen createPlayer={createPlayer} />}
-                    {screen === 'maze' && <GameScreen />}
-                    {screen === 'leaderboard' && <LeaderboardScreen />}
+                    {screen === "new-player" && (
+                        <StartGameScreen
+                            createPlayer={createPlayer}
+                            showLeaderboard={showLeaderboard}
+                        />
+                    )}
+
+                    {screen === "maze" && <GameScreen />}
+                    
+                    {screen === "leaderboard" && <LeaderboardScreen />}
                 </PlayerProvider>
             </TimerProvider>
         </div>

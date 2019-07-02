@@ -2,8 +2,13 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                brown: "#712c11",
-                orange: "#e04000"
+                brown: "#691e00",
+                'brown-dark': "#4e1e10",
+                orange: "#e04000",
+
+                gold: "#c4ad79",
+                silver: "#949494",
+                bronze: "#b37520",
             },
 
             fontSize: {

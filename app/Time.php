@@ -10,8 +10,6 @@ class Time extends Model
 
     public static function topTen() 
     {
-        return static::where('uuid', request('uuid'))->get()->map(function ($time) {
-            $time->delete();
-        });
+        return static::orderBy('total', 'asc')->get()->unique('uuid')->take(10);
     }
 }

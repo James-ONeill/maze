@@ -36681,6 +36681,49 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 /***/ }),
 
+/***/ "./node_modules/ordinal/index.js":
+/*!***************************************!*\
+  !*** ./node_modules/ordinal/index.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var indicator = __webpack_require__(/*! ./indicator */ "./node_modules/ordinal/indicator.js")
+
+function ordinal (i) {
+  if (typeof i !== 'number') throw new TypeError('Expected Number, got ' + (typeof i) + ' ' + i)
+
+  if (!Number.isFinite(i)) return i
+  return i + indicator(i)
+}
+
+ordinal.indicator = indicator
+module.exports = ordinal
+
+
+/***/ }),
+
+/***/ "./node_modules/ordinal/indicator.js":
+/*!*******************************************!*\
+  !*** ./node_modules/ordinal/indicator.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = function indicator (i) {
+  i = Math.abs(i)
+  var cent = i % 100
+  if (cent >= 10 && cent <= 20) return 'th'
+  var dec = i % 10
+  if (dec === 1) return 'st'
+  if (dec === 2) return 'nd'
+  if (dec === 3) return 'rd'
+  return 'th'
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -62452,6 +62495,10 @@ function App() {
       screen = _useState2[0],
       setScreen = _useState2[1];
 
+  function showLeaderboard() {
+    setScreen("leaderboard");
+  }
+
   var maze = Object(react__WEBPACK_IMPORTED_MODULE_1__["useContext"])(_context_MazeContext__WEBPACK_IMPORTED_MODULE_8__["default"]);
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
@@ -62492,15 +62539,22 @@ function App() {
       player = _useState6[0],
       setPlayer = _useState6[1];
 
-  function createPlayer(name) {
+  function createPlayer(_ref) {
+    var name = _ref.name,
+        email = _ref.email;
     setPlayer(_objectSpread({}, player, {
-      name: name
+      name: name,
+      email: email
     }));
+    localStorage.setItem("name", name);
+    localStorage.setItem("email", email);
+    setScreen("maze");
   }
 
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     try {
       var name = localStorage.getItem("name");
+      var email = localStorage.getItem("email");
       var uuid = localStorage.getItem("uuid");
 
       if (!uuid) {
@@ -62510,6 +62564,7 @@ function App() {
 
       setPlayer(_objectSpread({}, player, {
         name: name,
+        email: email,
         uuid: uuid
       }));
     } catch (e) {}
@@ -62587,7 +62642,7 @@ function App() {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return window.axios.post('/times', {
+                return window.axios.post("/times", {
                   uuid: player.uuid,
                   name: player.name,
                   minutes: time.minutes(),
@@ -62621,9 +62676,10 @@ function App() {
       move: move,
       setName: setName
     })
-  }, screen === 'new-player' && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_StartGameScreen__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    createPlayer: createPlayer
-  }), screen === 'maze' && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_GameScreen__WEBPACK_IMPORTED_MODULE_5__["default"], null), screen === 'leaderboard' && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_LeaderboardScreen__WEBPACK_IMPORTED_MODULE_7__["default"], null))));
+  }, screen === "new-player" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_StartGameScreen__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    createPlayer: createPlayer,
+    showLeaderboard: showLeaderboard
+  }), screen === "maze" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_GameScreen__WEBPACK_IMPORTED_MODULE_5__["default"], null), screen === "leaderboard" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_LeaderboardScreen__WEBPACK_IMPORTED_MODULE_7__["default"], null))));
 }
 
 var rootElement = document.getElementById("root");
@@ -62742,6 +62798,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var ordinal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ordinal */ "./node_modules/ordinal/index.js");
+/* harmony import */ var ordinal__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(ordinal__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -62755,6 +62815,8 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -62797,11 +62859,37 @@ function LeaderboardScreen() {
 
     fetchData();
   }, []);
-  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, times.map(function (time, index) {
-    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+
+  function textColor(index) {
+    var colors = ["gold", "silver", "bronze"];
+    return "text-".concat(colors[index] || "brown-dark");
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
+    className: "mb-6 mx-auto w-32",
+    src: "/img/logo.png"
+  }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "bg-white max-w-xl mx-auto px-6 text-brown-dark uppercase"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h2", {
+    className: "text-center"
+  }, "LEADERBOARD"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("table", {
+    className: "w-full"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, times.map(function (time, index) {
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
+      className: "border-b-2 border-brown-dark ".concat(textColor(index)),
       key: time.id
-    }, index + 1, ": ", time.name, time.minutes, ":", time.seconds, ":", time.milliseconds);
-  }));
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      className: "pr-1"
+    }, ordinal__WEBPACK_IMPORTED_MODULE_2___default()(index + 1)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      className: "pr-1"
+    }, time.name), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      className: "pr-1"
+    }, "CAP"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      "class": "text-right"
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "bg-orange".concat(" inline-block text-white px-1 py-2")
+    }, Object(lodash__WEBPACK_IMPORTED_MODULE_3__["padStart"])(time.minutes, 2, "0"), ":", Object(lodash__WEBPACK_IMPORTED_MODULE_3__["padStart"])(time.seconds, 2, "0"), ":", Object(lodash__WEBPACK_IMPORTED_MODULE_3__["padStart"])(time.milliseconds, 3, "0"))));
+  })))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (LeaderboardScreen);
@@ -62916,24 +63004,31 @@ function Player() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _context_PlayerContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/PlayerContext */ "./resources/js/context/PlayerContext.js");
+
 
 
 function NewPlayerScreen(_ref) {
-  var createPlayer = _ref.createPlayer;
+  var createPlayer = _ref.createPlayer,
+      showLeaderboard = _ref.showLeaderboard;
   var nameInput = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
   var emailInput = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
+  var player = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_PlayerContext__WEBPACK_IMPORTED_MODULE_1__["default"]);
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     className: "max-w-xl mx-auto px-8 text-center",
     onSubmit: function onSubmit(event) {
       event.preventDefault();
-      createPlayer(nameInput.current.value);
+      createPlayer({
+        name: nameInput.current.value,
+        email: emailInput.current.value
+      });
     }
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-6 mx-auto w-32",
+    className: "mb-16 mx-auto w-32",
     src: "/img/logo.png"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     className: "mb-6 mx-auto w-16",
-    src: "/img/coffee-cup.png"
+    src: "/img/coffee-cup-anim.gif"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
     className: "mb-6 text-base text-center text-shadow-white"
   }, "COFFEE TO GO", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
@@ -62941,13 +63036,21 @@ function NewPlayerScreen(_ref) {
   }, "!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "text-xl text-orange"
   }, "PATH TO PURCHASE")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    className: "mb-4 w-full bg-gray-200 p-3 uppercase focus:outline-none",
+    className: "nes-input | mb-4 | focus:outline-none",
+    style: {
+      background: "white"
+    },
     placeholder: "ENTER NAME...",
+    defaultValue: player.name,
     ref: nameInput,
     type: "text"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    className: "mb-6 w-full bg-gray-200 p-3 uppercase focus:outline-none",
+    className: "nes-input | mb-6 | focus:outline-none",
+    style: {
+      background: "white"
+    },
     placeholder: "ENTER EMAIL...",
+    defaultValue: player.email,
     ref: emailInput,
     type: "text"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
@@ -62955,14 +63058,15 @@ function NewPlayerScreen(_ref) {
   }, "ENTER DETAILS TO PLAY"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "flex px-2 text-white"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "w-1/2 px-1"
+    className: "w-1/2 px-2"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "bg-brown flex h-10 items-center justify-center text-center text-shadow-dark-brown text-xs w-full",
-    type: "button"
+    className: "bg-brown flex h-12 items-center justify-center text-center text-shadow-dark-brown text-xs w-full shadow-button-dark focus:outline-none",
+    type: "button",
+    onClick: showLeaderboard
   }, "LEADERBOARD")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "w-1/2 px-1"
+    className: "w-1/2 px-2"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "bg-orange flex h-10 items-center justify-center text-center text-shadow-dark-orange text-xl w-full",
+    className: "bg-orange flex h-12 items-center justify-center text-center text-shadow-dark-orange shadow-button-orange text-xl w-full focus:outline-none",
     type: "submit"
   }, "PLAY"))));
 }
@@ -63078,7 +63182,7 @@ function shelf() {
 function block() {
   return tile({
     type: 'obstacle',
-    className: "bg-orange-500"
+    className: "bg-orange"
   });
 }
 

@@ -19,7 +19,7 @@ function shelf() {
 function block() {
     return tile({
         type: 'obstacle',
-        className: "bg-orange-500"
+        className: "bg-orange"
     })
 }
 
