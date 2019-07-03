@@ -2,15 +2,7 @@ import React, { useContext } from "react";
 import MazeContext from "../context/MazeContext";
 
 function Maze() {
-    const { tiles, entrance, coffeeMachine } = useContext(MazeContext);
-
-    function isEntrance(x, y) {
-        return entrance.x === x && entrance.y === y;
-    }
-
-    function isCoffeeMachine(x, y) {
-        return coffeeMachine.x === x && coffeeMachine.y === y;
-    }
+    const { tiles } = useContext(MazeContext);
 
     return (
         <div className="maze">
@@ -18,7 +10,7 @@ function Maze() {
                 rowTiles.map((tile, col) => (
                     <div
                         key={`${row}-${col}`}
-                        className={`tile ${tile.className}`}
+                        className={`tile`}
                         data-obstacle={!tile}
                     />
                 ))

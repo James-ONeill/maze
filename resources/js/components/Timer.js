@@ -30,7 +30,7 @@ function Timer() {
 
     function elapsedTime() {
         return timer.startTime && !isNaN(timeElapsed.minutes())
-            ? `${padStart(timeElapsed.minutes().toString(), 2, "0")}:${padStart(
+            ? `${timeElapsed.minutes().toString()}:${padStart(
                   timeElapsed.seconds().toString(),
                   2,
                   0
@@ -38,7 +38,12 @@ function Timer() {
             : "00:00:000";
     }
 
-    return <div>{elapsedTime()}</div>;
+    return (
+        <div className="bg-white px-1 py-2 text-center">
+            <div className="text-orange text-xs">TIME</div>
+            {elapsedTime()}
+        </div>
+    );
 }
 
 export default Timer;

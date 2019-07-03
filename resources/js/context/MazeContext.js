@@ -12,14 +12,14 @@ function tile(settings) {
 function shelf() {
     return tile({
         type: 'wall',
-        className: "bg-gray-900",
+        className: "",
     })
 }
 
 function block() {
     return tile({
         type: 'obstacle',
-        className: "bg-orange"
+        className: ""
     })
 }
 

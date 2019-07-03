@@ -6,16 +6,19 @@ import "./bootstrap";
 import GameScreen from "./components/GameScreen";
 import StartGameScreen from "./components/StartGameScreen";
 import LeaderboardScreen from "./components/LeaderboardScreen";
+import CoffeeMachineScreen from "./components/CoffeeMachineScreen";
 import MazeContext from "./context/MazeContext";
 import { TimerProvider } from "./context/TimerContext";
 import { PlayerProvider } from "./context/PlayerContext";
 
 function App() {
-    const [screen, setScreen] = useState("new-player");
+    const [screen, setScreen] = useState("start-game");
 
     function showLeaderboard() {
         setScreen("leaderboard");
     }
+
+    const [drink, updateDrink] = useState(null);
 
     const maze = useContext(MazeContext);
 
@@ -61,7 +64,7 @@ function App() {
         localStorage.setItem("name", name);
         localStorage.setItem("email", email);
 
-        setScreen("maze");
+        setScreen("game");
     }
 
     useEffect(() => {
@@ -121,7 +124,10 @@ function App() {
             newPlayer.x == maze.coffeeMachine.x &&
             newPlayer.y == maze.coffeeMachine.y
         ) {
+            setScreen("coffee-machine");
             newPlayer.hasCoffee = true;
+            setPlayer({ ...newPlayer, direction: 'down' });
+            return;
         }
 
         if (
@@ -131,6 +137,7 @@ function App() {
         ) {
             newPlayer.hasCompleted = true;
             stopTimer();
+            showLeaderboard();
         }
 
         setPlayer({ ...newPlayer, direction });
@@ -141,8 +148,10 @@ function App() {
 
         async function postData(time) {
             const response = await window.axios.post("/times", {
+                drink,
                 uuid: player.uuid,
                 name: player.name,
+                email: player.email,
                 minutes: time.minutes(),
                 seconds: time.seconds(),
                 milliseconds: time.milliseconds()
@@ -158,14 +167,21 @@ function App() {
                 value={{ ...timer, startTimer, stopTimer, timeElapsed }}
             >
                 <PlayerProvider value={{ ...player, move, setName }}>
-                    {screen === "new-player" && (
+                    {screen === "start-game" && (
                         <StartGameScreen
                             createPlayer={createPlayer}
                             showLeaderboard={showLeaderboard}
                         />
                     )}
 
-                    {screen === "maze" && <GameScreen />}
+                    {screen === "game" && <GameScreen />}
+
+                    {screen === "coffee-machine" && (
+                        <CoffeeMachineScreen
+                            updateDrink={updateDrink}
+                            onComplete={() => setScreen("game")}
+                        />
+                    )}
                     
                     {screen === "leaderboard" && <LeaderboardScreen />}
                 </PlayerProvider>

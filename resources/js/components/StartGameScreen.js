@@ -19,7 +19,7 @@ function NewPlayerScreen({ createPlayer, showLeaderboard }) {
                 });
             }}
         >
-            <img className="mb-16 mx-auto w-32" src="/img/logo.png" />
+            <img className="mb-6 mx-auto w-32" src="/img/logo.png" />
 
             <img className="mb-6 mx-auto w-16" src="/img/coffee-cup-anim.gif" />
 

@@ -20,9 +20,11 @@ class TimesController extends Controller
         $time = Time::create(array_merge(request([
             'uuid',
             'name', 
+            'email', 
+            'drink',
             'minutes', 
             'seconds', 
-            'milliseconds'
+            'milliseconds',
         ]), [
             'total' => $total
         ]));

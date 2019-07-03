@@ -32,31 +32,21 @@
 }
 
 .maze {
+    background-image: url('/img/maze.jpg');
+    background-size: 100%;
     display: grid;
-    grid-template-columns: repeat(16, 1.5rem);
-    grid-template-rows: repeat(16, 1.5rem);
+    grid-template-columns: repeat(16, 1.25rem);
+    grid-template-rows: repeat(16, 1.25rem);
     width: fit-content;
-}
-
-.tile {
-    background: #c3c3c3;
-}
-
-.tile[data-obstacle="true"] {
-    background: #333;
 }
 
 .player {
     align-items: center;
-    background: red;
-    border-radius: 50%;
-    display: flex;
-    height: 1.5rem;
-    justify-content: center;
+    height: 1.25rem;
     left: 0;
     position: absolute;
     top: 0;
-    width: 1.5rem;
+    width: 1.25rem;
 }
 
 .nes-input {
@@ -96,4 +86,31 @@
 
 .shadow-button-orange {
     box-shadow: 0 4px 0 #b02c00, -4px 0 0 #f86b39, 4px 0 0 #b02c00, 0 -4px 0 #f86b39;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.controls .up {
+    grid-column: 2 / 2;
+}
+
+.controls .down {
+    grid-column: 2 / 2;
+    grid-row: 3 / 3;
+    margin-top: -15px;
+}
+
+.controls .left {
+    grid-column: 1 / 1;
+    grid-row: 2 / 2;
+    margin-top: -15px;
+}
+
+.controls .right {
+    grid-column: 3 / 3;
+    grid-row: 2 / 2;
+    margin-top: -15px;
 }

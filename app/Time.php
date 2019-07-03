@@ -10,6 +10,6 @@ class Time extends Model
 
     public static function topTen() 
     {
-        return static::orderBy('total', 'asc')->get()->unique('uuid')->take(10);
+        return static::orderBy('total', 'asc')->get()->unique('uuid')->take(10)->values();
     }
 }
