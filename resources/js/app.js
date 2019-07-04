@@ -31,6 +31,23 @@ function App() {
     const [screen, setScreen] = useState("start-game");
     const [latestTime, updateLatestTime] = useState(null);
 
+    useEffect(() => {
+        window.addEventListener('focus', () => {
+            if (screen === 'game') {
+                themeAudio.play();
+            }
+
+            if (screen === 'leaderboard' && latestTime != null) {
+                endThemeAudio.play();
+            }
+        });
+
+        window.addEventListener('blur', () => {
+            themeAudio.pause();
+            endThemeAudio.pause();;
+        });
+    }, [])
+
     function showLeaderboard() {
         setScreen("leaderboard");
     }
@@ -160,6 +177,7 @@ function App() {
             newPlayer.hasCompleted = true;
             stopTimer();
             showLeaderboard();
+            themeAudio.pause();
             endThemeAudio.play();
         }
 

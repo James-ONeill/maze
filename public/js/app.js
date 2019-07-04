@@ -62514,6 +62514,23 @@ function App() {
       latestTime = _useState4[0],
       updateLatestTime = _useState4[1];
 
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+    window.addEventListener('focus', function () {
+      if (screen === 'game') {
+        themeAudio.play();
+      }
+
+      if (screen === 'leaderboard' && latestTime != null) {
+        endThemeAudio.play();
+      }
+    });
+    window.addEventListener('blur', function () {
+      themeAudio.pause();
+      endThemeAudio.pause();
+      ;
+    });
+  }, []);
+
   function showLeaderboard() {
     setScreen("leaderboard");
   }
@@ -62651,6 +62668,7 @@ function App() {
         newPlayer.hasCompleted = true;
         stopTimer();
         showLeaderboard();
+        themeAudio.pause();
         endThemeAudio.play();
       }
 
