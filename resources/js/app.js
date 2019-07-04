@@ -13,6 +13,7 @@ import { PlayerProvider } from "./context/PlayerContext";
 
 function App() {
     const [screen, setScreen] = useState("start-game");
+    const [latestTime, updateLatestTime] = useState(null);
 
     function showLeaderboard() {
         setScreen("leaderboard");
@@ -126,7 +127,7 @@ function App() {
         ) {
             setScreen("coffee-machine");
             newPlayer.hasCoffee = true;
-            setPlayer({ ...newPlayer, direction: 'down' });
+            setPlayer({ ...newPlayer, direction: "down" });
             return;
         }
 
@@ -156,10 +157,29 @@ function App() {
                 seconds: time.seconds(),
                 milliseconds: time.milliseconds()
             });
+
+            updateLatestTime(response.data.time);
         }
 
         postData(timeElapsed());
     }, [player.hasCompleted]);
+
+    function resetGame() {
+        setPlayer({
+            ...player,
+            x: maze.entrance.x,
+            y: maze.entrance.y,
+            direction: "up",
+            hasCompleted: false,
+        });
+
+        setTimer({
+            startTime: null,
+            endTime: null
+        });
+
+        setScreen('start-game');
+    }
 
     return (
         <div>
@@ -182,8 +202,13 @@ function App() {
                             onComplete={() => setScreen("game")}
                         />
                     )}
-                    
-                    {screen === "leaderboard" && <LeaderboardScreen />}
+
+                    {screen === "leaderboard" && (
+                        <LeaderboardScreen
+                            latestTime={latestTime}
+                            exit={resetGame}
+                        />
+                    )}
                 </PlayerProvider>
             </TimerProvider>
         </div>

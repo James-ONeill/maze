@@ -62497,24 +62497,29 @@ function App() {
       screen = _useState2[0],
       setScreen = _useState2[1];
 
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null),
+      _useState4 = _slicedToArray(_useState3, 2),
+      latestTime = _useState4[0],
+      updateLatestTime = _useState4[1];
+
   function showLeaderboard() {
     setScreen("leaderboard");
   }
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null),
-      _useState4 = _slicedToArray(_useState3, 2),
-      drink = _useState4[0],
-      updateDrink = _useState4[1];
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      drink = _useState6[0],
+      updateDrink = _useState6[1];
 
   var maze = Object(react__WEBPACK_IMPORTED_MODULE_1__["useContext"])(_context_MazeContext__WEBPACK_IMPORTED_MODULE_9__["default"]);
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
     startTime: null,
     endTime: null
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      timer = _useState6[0],
-      setTimer = _useState6[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      timer = _useState8[0],
+      setTimer = _useState8[1];
 
   function timeElapsed() {
     var compare = timer.endTime ? timer.endTime : moment__WEBPACK_IMPORTED_MODULE_3___default()();
@@ -62535,16 +62540,16 @@ function App() {
     }));
   }
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
     name: "James",
     x: maze.entrance.x,
     y: maze.entrance.y,
     direction: "up",
     uuid: null
   }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      player = _useState8[0],
-      setPlayer = _useState8[1];
+      _useState10 = _slicedToArray(_useState9, 2),
+      player = _useState10[0],
+      setPlayer = _useState10[1];
 
   function createPlayer(_ref) {
     var name = _ref.name,
@@ -62621,7 +62626,7 @@ function App() {
         setScreen("coffee-machine");
         newPlayer.hasCoffee = true;
         setPlayer(_objectSpread({}, newPlayer, {
-          direction: 'down'
+          direction: "down"
         }));
         return;
       }
@@ -62667,8 +62672,9 @@ function App() {
 
               case 2:
                 response = _context.sent;
+                updateLatestTime(response.data.time);
 
-              case 3:
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -62680,6 +62686,21 @@ function App() {
 
     postData(timeElapsed());
   }, [player.hasCompleted]);
+
+  function resetGame() {
+    setPlayer(_objectSpread({}, player, {
+      x: maze.entrance.x,
+      y: maze.entrance.y,
+      direction: "up",
+      hasCompleted: false
+    }));
+    setTimer({
+      startTime: null,
+      endTime: null
+    });
+    setScreen('start-game');
+  }
+
   return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_context_TimerContext__WEBPACK_IMPORTED_MODULE_10__["TimerProvider"], {
     value: _objectSpread({}, timer, {
       startTimer: startTimer,
@@ -62699,7 +62720,10 @@ function App() {
     onComplete: function onComplete() {
       return setScreen("game");
     }
-  }), screen === "leaderboard" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_LeaderboardScreen__WEBPACK_IMPORTED_MODULE_7__["default"], null))));
+  }), screen === "leaderboard" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_LeaderboardScreen__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    latestTime: latestTime,
+    exit: resetGame
+  }))));
 }
 
 var rootElement = document.getElementById("root");
@@ -62782,6 +62806,8 @@ function CoffeeMachineScreen(_ref) {
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "px-4"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "max-w-xl mx-auto"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "bg-white py-6 px-4"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "text-center text-sm mb-6"
@@ -62828,7 +62854,7 @@ function CoffeeMachineScreen(_ref) {
     onClick: function onClick() {
       return chooseDrink("MOC");
     }
-  }, "MOCHA"))))));
+  }, "MOCHA")))))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (CoffeeMachineScreen);
@@ -62941,31 +62967,33 @@ function GameScreen() {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "px-12"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "flex"
+    className: "flex max-w-xl mx-auto"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "w-1/2"
+    className: "w-1/2 pr-10"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     className: "mb-6 mx-auto w-32",
     src: "/img/logo.png"
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "w-1/2"
+    className: "w-1/2 pl-10"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mt-6",
+    className: "mb-6 mt-6",
     src: "/img/title-anim.gif"
   })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "px-8"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "mx-auto relative",
+    className: "max-w-xl mx-auto"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "mx-auto mb-6 relative",
     style: {
       width: "fit-content"
     }
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Maze__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Player__WEBPACK_IMPORTED_MODULE_3__["default"], null))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "flex"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Maze__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Player__WEBPACK_IMPORTED_MODULE_3__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "flex -mx-4"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "w-1/2"
+    className: "pr-2 w-1/2"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Timer__WEBPACK_IMPORTED_MODULE_2__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "w-1/2"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Controls__WEBPACK_IMPORTED_MODULE_4__["default"], null))));
+    className: "pl-2 w-1/2"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Controls__WEBPACK_IMPORTED_MODULE_4__["default"], null))))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (GameScreen);
@@ -63009,7 +63037,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-function LeaderboardScreen() {
+function LeaderboardScreen(_ref) {
+  var latestTime = _ref.latestTime,
+      exit = _ref.exit;
+
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
       times = _useState2[0],
@@ -63048,7 +63079,7 @@ function LeaderboardScreen() {
     }
 
     fetchData();
-  }, []);
+  }, [latestTime]);
 
   function textColor(index) {
     var colors = ["gold", "silver", "bronze"];
@@ -63061,9 +63092,18 @@ function LeaderboardScreen() {
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "px-8"
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "bg-white max-w-xl mx-auto px-6 py-8 text-brown-dark uppercase"
+    className: "bg-white max-w-xl mb-6 mx-auto overflow-scroll px-6 py-8 text-brown-dark uppercase",
+    style: {
+      height: "22rem"
+    }
+  }, latestTime && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "mb-6"
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h2", {
-    className: "mb-8 text-center"
+    className: "mb-4 text-center text-orange"
+  }, "YOUR TIME!"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "flex justify-between text-xs"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, ordinal__WEBPACK_IMPORTED_MODULE_2___default()(latestTime.position)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, latestTime.name), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, latestTime.drink), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, latestTime.minutes, ":", Object(lodash__WEBPACK_IMPORTED_MODULE_3__["padStart"])(latestTime.seconds, 2, "0"), ":", Object(lodash__WEBPACK_IMPORTED_MODULE_3__["padStart"])(latestTime.milliseconds, 3, "0")))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h2", {
+    className: "mb-4 text-center"
   }, "LEADERBOARD"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("table", {
     className: "text-xs w-full"
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, times.map(function (time, index) {
@@ -63077,11 +63117,21 @@ function LeaderboardScreen() {
     }, time.name), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
       className: "pr-1"
     }, time.drink), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
-      "class": "text-right"
+      className: "text-right"
     }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: "".concat(player.uuid === time.uuid ? "bg-orange text-white" : "", " inline-block my-1 px-1 py-2")
     }, time.minutes, ":", Object(lodash__WEBPACK_IMPORTED_MODULE_3__["padStart"])(time.seconds, 2, "0"), ":", Object(lodash__WEBPACK_IMPORTED_MODULE_3__["padStart"])(time.milliseconds, 3, "0"))));
-  }))))));
+  })))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "max-w-xl mx-auto"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "flex justify-center px-2 text-white"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "w-full px-2"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    className: "bg-orange flex h-12 items-center justify-center text-center text-shadow-dark-orange shadow-button-orange text-xl w-full focus:outline-none",
+    type: "button",
+    onClick: exit
+  }, latestTime ? "PLAY AGAIN" : "EXIT"))))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (LeaderboardScreen);
@@ -63317,11 +63367,16 @@ function Timer() {
     return timer.startTime && !isNaN(timeElapsed.minutes()) ? "".concat(timeElapsed.minutes().toString(), ":").concat(Object(lodash__WEBPACK_IMPORTED_MODULE_1__["padStart"])(timeElapsed.seconds().toString(), 2, 0), ":").concat(Object(lodash__WEBPACK_IMPORTED_MODULE_1__["padStart"])(timeElapsed.milliseconds().toString(), 3, "0")) : "00:00:000";
   }
 
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "bg-white px-1 py-2 text-center"
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "text-2xs text-center mb-2"
+  }, "THE TIMER WILL START WHEN YOU MAKE YOUR FIRST MOVE"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "bg-white mx-auto px-2 py-2 text-center",
+    style: {
+      width: 'fit-content'
+    }
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "text-orange text-xs"
-  }, "TIME"), elapsedTime());
+  }, "TIME"), elapsedTime()));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Timer);

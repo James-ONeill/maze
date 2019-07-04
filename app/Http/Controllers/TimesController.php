@@ -8,13 +8,15 @@ class TimesController extends Controller
 {
     public function index()
     {
-        $times = Time::topTen();
+        $times = Time::orderBy('total', 'asc')->limit(10)->get();
 
         return $times;
     }
 
     public function store()
     {
+        Time::where('uuid', request('uuid'))->delete();
+
         $total = request('milliseconds', 0) + (request('seconds', 0) * 1000) + ((request('minutes', 0) * 60) * 1000);
 
         $time = Time::create(array_merge(request([
@@ -29,7 +31,9 @@ class TimesController extends Controller
             'total' => $total
         ]));
 
-        $topTen = Time::topTen();
+        $time->append('position');
+
+        $topTen = Time::orderBy('total', 'asc')->limit(10)->get();
 
         return response()->json([
             'time' => $time,

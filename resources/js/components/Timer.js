@@ -39,10 +39,13 @@ function Timer() {
     }
 
     return (
-        <div className="bg-white px-1 py-2 text-center">
-            <div className="text-orange text-xs">TIME</div>
-            {elapsedTime()}
-        </div>
+        <>
+            <p className="text-2xs text-center mb-2">THE TIMER WILL START WHEN YOU MAKE YOUR FIRST MOVE</p>
+            <div className="bg-white mx-auto px-2 py-2 text-center" style={{ width: 'fit-content' }}>
+                <div className="text-orange text-xs">TIME</div>
+                {elapsedTime()}
+            </div>
+        </>
     );
 }
 
