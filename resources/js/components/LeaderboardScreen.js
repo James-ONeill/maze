@@ -25,7 +25,7 @@ function LeaderboardScreen({ latestTime, exit }) {
 
     return (
         <>
-            <img className="mb-6 mx-auto w-32" src="/img/logo.png" />
+            <img className="mb-6 mx-auto w-24" src="/img/logo.png" />
 
             <div className="px-8">
                 <div
@@ -89,7 +89,7 @@ function LeaderboardScreen({ latestTime, exit }) {
                         </tbody>
                     </table>
                 </div>
-                
+
                 <div className="max-w-xl mx-auto">
                     <div className="flex justify-center px-2 text-white">
                         <div className="w-full px-2">

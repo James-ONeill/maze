@@ -627,6 +627,10 @@ video {
   }
 }
 
+input, textarea {
+  -webkit-appearance: none;
+}
+
 .frame-border {
   position: relative;
   z-index: -1;

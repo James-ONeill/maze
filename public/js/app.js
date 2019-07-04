@@ -62801,7 +62801,7 @@ function CoffeeMachineScreen(_ref) {
   }
 
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-6 mx-auto w-32",
+    className: "mb-6 mx-auto w-24",
     src: "/img/logo.png"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "px-4"
@@ -63087,7 +63087,7 @@ function LeaderboardScreen(_ref) {
   }
 
   return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
-    className: "mb-6 mx-auto w-32",
+    className: "mb-6 mx-auto w-24",
     src: "/img/logo.png"
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "px-8"
@@ -63255,7 +63255,7 @@ function NewPlayerScreen(_ref) {
       });
     }
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: "mb-6 mx-auto w-32",
+    className: "mb-6 mx-auto w-24",
     src: "/img/logo.png"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     className: "mb-6 mx-auto w-16",
@@ -63287,7 +63287,7 @@ function NewPlayerScreen(_ref) {
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "text-xs mb-6 text-center text-shadow-white"
   }, "ENTER DETAILS TO PLAY"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "flex px-2 text-white"
+    className: "flex mb-6 px-2 text-white"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "w-1/2 px-2"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {

@@ -19,7 +19,7 @@ function NewPlayerScreen({ createPlayer, showLeaderboard }) {
                 });
             }}
         >
-            <img className="mb-6 mx-auto w-32" src="/img/logo.png" />
+            <img className="mb-6 mx-auto w-24" src="/img/logo.png" />
 
             <img className="mb-6 mx-auto w-16" src="/img/coffee-cup-anim.gif" />
 
@@ -51,7 +51,7 @@ function NewPlayerScreen({ createPlayer, showLeaderboard }) {
                 ENTER DETAILS TO PLAY
             </p>
 
-            <div className="flex px-2 text-white">
+            <div className="flex mb-6 px-2 text-white">
                 <div className="w-1/2 px-2">
                     <button
                         className="bg-brown flex h-12 items-center justify-center text-center text-shadow-dark-brown text-xs w-full shadow-button-dark focus:outline-none"

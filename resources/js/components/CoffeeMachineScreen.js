@@ -11,7 +11,7 @@ function CoffeeMachineScreen({ updateDrink, onComplete }) {
 
     return (
         <>
-            <img className="mb-6 mx-auto w-32" src="/img/logo.png" />
+            <img className="mb-6 mx-auto w-24" src="/img/logo.png" />
             <div className="px-4">
                 <div className="max-w-xl mx-auto">
                     <div className="bg-white py-6 px-4">
