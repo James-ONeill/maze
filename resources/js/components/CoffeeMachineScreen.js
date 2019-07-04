@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 
+const pouringCoffeeAudio = new Audio('/audio/pouring-coffee.wav');
+
 function CoffeeMachineScreen({ updateDrink, onComplete }) {
     const [dispensing, updateDispensing] = useState(false);
 
     function chooseDrink(drink = "CAP") {
         updateDispensing(true);
         updateDrink(drink);
-        setTimeout(onComplete, 3000);
+        
+        pouringCoffeeAudio.play();
+        pouringCoffeeAudio.addEventListener('ended', onComplete);
     }
 
     return (

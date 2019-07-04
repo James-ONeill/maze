@@ -62490,6 +62490,18 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+var footstepAudio = new Audio("/audio/footsteps.wav");
+footstepAudio.load();
+footstepAudio.addEventListener("ended", footstepAudio.load);
+var coffeeMachineAudio = new Audio("/audio/reach-coffee-machine.wav");
+coffeeMachineAudio.load();
+coffeeMachineAudio.addEventListener("ended", coffeeMachineAudio.load);
+var themeAudio = new Audio('/audio/themetune-background-gameplay.mp3');
+themeAudio.load();
+themeAudio.loop = true;
+var endThemeAudio = new Audio('/audio/themetune-end.mp3');
+endThemeAudio.load();
+endThemeAudio.loop = true;
 
 function App() {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])("start-game"),
@@ -62528,6 +62540,7 @@ function App() {
 
   function startTimer() {
     if (timer.startTime) return;
+    themeAudio.play();
     setTimer(_objectSpread({}, timer, {
       startTime: moment__WEBPACK_IMPORTED_MODULE_3___default()(),
       endTime: null
@@ -62535,6 +62548,7 @@ function App() {
   }
 
   function stopTimer() {
+    themeAudio.pause();
     setTimer(_objectSpread({}, timer, {
       endTime: moment__WEBPACK_IMPORTED_MODULE_3___default()()
     }));
@@ -62616,6 +62630,7 @@ function App() {
       }
 
       if (!maze.tiles[newPlayer.y] || !maze.tiles[newPlayer.y][newPlayer.x] || !maze.traversableTiles.includes(maze.tiles[newPlayer.y][newPlayer.x].type)) {
+        footstepAudio.play();
         setPlayer(_objectSpread({}, player, {
           direction: direction
         }));
@@ -62623,6 +62638,7 @@ function App() {
       }
 
       if (newPlayer.x == maze.coffeeMachine.x && newPlayer.y == maze.coffeeMachine.y) {
+        coffeeMachineAudio.play();
         setScreen("coffee-machine");
         newPlayer.hasCoffee = true;
         setPlayer(_objectSpread({}, newPlayer, {
@@ -62635,8 +62651,10 @@ function App() {
         newPlayer.hasCompleted = true;
         stopTimer();
         showLeaderboard();
+        endThemeAudio.play();
       }
 
+      footstepAudio.play();
       setPlayer(_objectSpread({}, newPlayer, {
         direction: direction
       }));
@@ -62688,6 +62706,7 @@ function App() {
   }, [player.hasCompleted]);
 
   function resetGame() {
+    endThemeAudio.pause();
     setPlayer(_objectSpread({}, player, {
       x: maze.entrance.x,
       y: maze.entrance.y,
@@ -62698,7 +62717,7 @@ function App() {
       startTime: null,
       endTime: null
     });
-    setScreen('start-game');
+    setScreen("start-game");
   }
 
   return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_context_TimerContext__WEBPACK_IMPORTED_MODULE_10__["TimerProvider"], {
@@ -62783,6 +62802,7 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
+var pouringCoffeeAudio = new Audio('/audio/pouring-coffee.wav');
 
 function CoffeeMachineScreen(_ref) {
   var updateDrink = _ref.updateDrink,
@@ -62797,7 +62817,8 @@ function CoffeeMachineScreen(_ref) {
     var drink = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "CAP";
     updateDispensing(true);
     updateDrink(drink);
-    setTimeout(onComplete, 3000);
+    pouringCoffeeAudio.play();
+    pouringCoffeeAudio.addEventListener('ended', onComplete);
   }
 
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
@@ -63036,6 +63057,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+var theme = new Audio('/audio/themetune-end.mp3');
+theme.loop = true;
 
 function LeaderboardScreen(_ref) {
   var latestTime = _ref.latestTime,
@@ -63079,6 +63102,13 @@ function LeaderboardScreen(_ref) {
     }
 
     fetchData();
+  }, [latestTime]);
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+    if (!latestTime) return;
+    theme.play();
+    return function () {
+      return theme.pause();
+    };
   }, [latestTime]);
 
   function textColor(index) {
@@ -63150,16 +63180,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _context_MazeContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/MazeContext */ "./resources/js/context/MazeContext.js");
+/* harmony import */ var _context_TimerContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/TimerContext */ "./resources/js/context/TimerContext.js");
 
 
+
+var audio = new Audio('/audio/themetune-background-gameplay.mp3');
+audio.load();
+audio.loop = true;
 
 function Maze() {
   var _useContext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_MazeContext__WEBPACK_IMPORTED_MODULE_1__["default"]),
       tiles = _useContext.tiles;
 
+  var _useContext2 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_TimerContext__WEBPACK_IMPORTED_MODULE_2__["default"]),
+      startTime = _useContext2.startTime,
+      startTimer = _useContext2.startTimer;
+
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "maze"
-  }, tiles.map(function (rowTiles, row) {
+    className: "maze relative"
+  }, startTime === null && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    className: "absolute inset-0 z-10",
+    src: "/img/how-to-play.png",
+    onClick: startTimer
+  }), tiles.map(function (rowTiles, row) {
     return rowTiles.map(function (tile, col) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "".concat(row, "-").concat(col),

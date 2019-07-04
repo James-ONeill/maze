@@ -4,6 +4,9 @@ import { padStart } from "lodash";
 
 import PlayerContext from "../context/PlayerContext";
 
+const theme = new Audio('/audio/themetune-end.mp3');
+theme.loop = true;
+
 function LeaderboardScreen({ latestTime, exit }) {
     const [times, updateTimes] = useState([]);
     const player = useContext(PlayerContext);
@@ -16,6 +19,14 @@ function LeaderboardScreen({ latestTime, exit }) {
         }
 
         fetchData();
+    }, [latestTime]);
+
+    useEffect(() => {
+        if (!latestTime) return;
+
+        theme.play();
+
+        return () => theme.pause();
     }, [latestTime]);
 
     function textColor(index) {

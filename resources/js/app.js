@@ -11,6 +11,22 @@ import MazeContext from "./context/MazeContext";
 import { TimerProvider } from "./context/TimerContext";
 import { PlayerProvider } from "./context/PlayerContext";
 
+const footstepAudio = new Audio("/audio/footsteps.wav");
+footstepAudio.load();
+footstepAudio.addEventListener("ended", footstepAudio.load);
+
+const coffeeMachineAudio = new Audio("/audio/reach-coffee-machine.wav");
+coffeeMachineAudio.load();
+coffeeMachineAudio.addEventListener("ended", coffeeMachineAudio.load);
+
+const themeAudio = new Audio('/audio/themetune-background-gameplay.mp3');
+themeAudio.load();
+themeAudio.loop = true;
+
+const endThemeAudio = new Audio('/audio/themetune-end.mp3');
+endThemeAudio.load();
+endThemeAudio.loop = true;
+
 function App() {
     const [screen, setScreen] = useState("start-game");
     const [latestTime, updateLatestTime] = useState(null);
@@ -36,6 +52,7 @@ function App() {
 
     function startTimer() {
         if (timer.startTime) return;
+        themeAudio.play();
 
         setTimer({
             ...timer,
@@ -45,6 +62,7 @@ function App() {
     }
 
     function stopTimer() {
+        themeAudio.pause();
         setTimer({
             ...timer,
             endTime: moment()
@@ -117,6 +135,7 @@ function App() {
                 maze.tiles[newPlayer.y][newPlayer.x].type
             )
         ) {
+            footstepAudio.play();
             setPlayer({ ...player, direction });
             return;
         }
@@ -125,9 +144,11 @@ function App() {
             newPlayer.x == maze.coffeeMachine.x &&
             newPlayer.y == maze.coffeeMachine.y
         ) {
+            coffeeMachineAudio.play();
             setScreen("coffee-machine");
             newPlayer.hasCoffee = true;
             setPlayer({ ...newPlayer, direction: "down" });
+
             return;
         }
 
@@ -139,8 +160,10 @@ function App() {
             newPlayer.hasCompleted = true;
             stopTimer();
             showLeaderboard();
+            endThemeAudio.play();
         }
 
+        footstepAudio.play();
         setPlayer({ ...newPlayer, direction });
     };
 
@@ -165,12 +188,13 @@ function App() {
     }, [player.hasCompleted]);
 
     function resetGame() {
+        endThemeAudio.pause();
         setPlayer({
             ...player,
             x: maze.entrance.x,
             y: maze.entrance.y,
             direction: "up",
-            hasCompleted: false,
+            hasCompleted: false
         });
 
         setTimer({
@@ -178,7 +202,7 @@ function App() {
             endTime: null
         });
 
-        setScreen('start-game');
+        setScreen("start-game");
     }
 
     return (
