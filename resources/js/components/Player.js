@@ -29,6 +29,7 @@ function Player() {
         <div
             className="player"
             style={{
+                transition: '0.5s transform',
                 transform: `translate(${1.25 * player.x}rem, ${1.25 *
                     player.y}rem)`
             }}

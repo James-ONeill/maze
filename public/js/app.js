@@ -62619,9 +62619,22 @@ function App() {
     }));
   }
 
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      animating = _useState12[0],
+      updateAnimating = _useState12[1];
+
   var move = function move(direction) {
     return function () {
-      if (player.hasCompleted) return;
+      if (player.hasCompleted || animating) return;
+
+      function playerAnimating() {
+        updateAnimating(true);
+        setTimeout(function () {
+          return updateAnimating(false);
+        }, 500);
+      }
+
       startTimer();
 
       var newPlayer = _objectSpread({}, player);
@@ -62661,10 +62674,11 @@ function App() {
         setPlayer(_objectSpread({}, newPlayer, {
           direction: "down"
         }));
+        playerAnimating();
         return;
       }
 
-      if (player.hasCoffee && newPlayer.x == maze.exit.x && newPlayer.y == maze.exit.y) {
+      if (player.hasCoffee && newPlayer.x === maze.exit.x && newPlayer.y === maze.exit.y) {
         newPlayer.hasCompleted = true;
         stopTimer();
         showLeaderboard();
@@ -62672,6 +62686,7 @@ function App() {
         endThemeAudio.play();
       }
 
+      playerAnimating();
       footstepAudio.play();
       setPlayer(_objectSpread({}, newPlayer, {
         direction: direction
@@ -63274,6 +63289,7 @@ function Player() {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "player",
     style: {
+      transition: '0.5s transform',
       transform: "translate(".concat(1.25 * player.x, "rem, ").concat(1.25 * player.y, "rem)")
     }
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {

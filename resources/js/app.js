@@ -122,8 +122,14 @@ function App() {
         setPlayer({ ...player, name });
     }
 
+    const [animating, updateAnimating] = useState(false);
     const move = direction => () => {
-        if (player.hasCompleted) return;
+        if (player.hasCompleted || animating) return;
+
+        function playerAnimating() {
+            updateAnimating(true);
+            setTimeout(() => updateAnimating(false), 500);
+        }
 
         startTimer();
 
@@ -154,6 +160,7 @@ function App() {
         ) {
             footstepAudio.play();
             setPlayer({ ...player, direction });
+
             return;
         }
 
@@ -165,14 +172,15 @@ function App() {
             setScreen("coffee-machine");
             newPlayer.hasCoffee = true;
             setPlayer({ ...newPlayer, direction: "down" });
+            playerAnimating();
 
             return;
         }
 
         if (
             player.hasCoffee &&
-            newPlayer.x == maze.exit.x &&
-            newPlayer.y == maze.exit.y
+            newPlayer.x === maze.exit.x &&
+            newPlayer.y === maze.exit.y
         ) {
             newPlayer.hasCompleted = true;
             stopTimer();
@@ -180,6 +188,8 @@ function App() {
             themeAudio.pause();
             endThemeAudio.play();
         }
+
+        playerAnimating();
 
         footstepAudio.play();
         setPlayer({ ...newPlayer, direction });
