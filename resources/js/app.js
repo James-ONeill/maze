@@ -7,6 +7,7 @@ import GameScreen from "./components/GameScreen";
 import StartGameScreen from "./components/StartGameScreen";
 import LeaderboardScreen from "./components/LeaderboardScreen";
 import CoffeeMachineScreen from "./components/CoffeeMachineScreen";
+import CheckoutScreen from "./components/CheckoutScreen";
 import MazeContext from "./context/MazeContext";
 import { TimerProvider } from "./context/TimerContext";
 import { PlayerProvider } from "./context/PlayerContext";
@@ -179,6 +180,18 @@ function App() {
 
         if (
             player.hasCoffee &&
+            newPlayer.x == maze.checkout.x &&
+            newPlayer.y == maze.checkout.y
+        ) {
+            setScreen("checkout");
+            setPlayer({ ...newPlayer, direction });
+            playerAnimating();
+
+            return;
+        }
+
+        if (
+            player.hasCoffee &&
             newPlayer.x === maze.exit.x &&
             newPlayer.y === maze.exit.y
         ) {
@@ -252,6 +265,13 @@ function App() {
                         <CoffeeMachineScreen
                             updateDrink={updateDrink}
                             onComplete={() => setScreen("game")}
+                        />
+                    )}
+
+                    {screen === "checkout" && (
+                        <CheckoutScreen
+                            drink={drink}
+                            onPaid={() => setScreen("game")}
                         />
                     )}
 

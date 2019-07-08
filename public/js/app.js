@@ -62458,9 +62458,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_StartGameScreen__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/StartGameScreen */ "./resources/js/components/StartGameScreen.js");
 /* harmony import */ var _components_LeaderboardScreen__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/LeaderboardScreen */ "./resources/js/components/LeaderboardScreen.js");
 /* harmony import */ var _components_CoffeeMachineScreen__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/CoffeeMachineScreen */ "./resources/js/components/CoffeeMachineScreen.js");
-/* harmony import */ var _context_MazeContext__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./context/MazeContext */ "./resources/js/context/MazeContext.js");
-/* harmony import */ var _context_TimerContext__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./context/TimerContext */ "./resources/js/context/TimerContext.js");
-/* harmony import */ var _context_PlayerContext__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./context/PlayerContext */ "./resources/js/context/PlayerContext.js");
+/* harmony import */ var _components_CheckoutScreen__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/CheckoutScreen */ "./resources/js/components/CheckoutScreen.js");
+/* harmony import */ var _context_MazeContext__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./context/MazeContext */ "./resources/js/context/MazeContext.js");
+/* harmony import */ var _context_TimerContext__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./context/TimerContext */ "./resources/js/context/TimerContext.js");
+/* harmony import */ var _context_PlayerContext__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./context/PlayerContext */ "./resources/js/context/PlayerContext.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -62478,6 +62479,7 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -62540,7 +62542,7 @@ function App() {
       drink = _useState6[0],
       updateDrink = _useState6[1];
 
-  var maze = Object(react__WEBPACK_IMPORTED_MODULE_1__["useContext"])(_context_MazeContext__WEBPACK_IMPORTED_MODULE_9__["default"]);
+  var maze = Object(react__WEBPACK_IMPORTED_MODULE_1__["useContext"])(_context_MazeContext__WEBPACK_IMPORTED_MODULE_10__["default"]);
 
   var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
     startTime: null,
@@ -62678,6 +62680,15 @@ function App() {
         return;
       }
 
+      if (player.hasCoffee && newPlayer.x == maze.checkout.x && newPlayer.y == maze.checkout.y) {
+        setScreen("checkout");
+        setPlayer(_objectSpread({}, newPlayer, {
+          direction: direction
+        }));
+        playerAnimating();
+        return;
+      }
+
       if (player.hasCoffee && newPlayer.x === maze.exit.x && newPlayer.y === maze.exit.y) {
         newPlayer.hasCompleted = true;
         stopTimer();
@@ -62753,13 +62764,13 @@ function App() {
     setScreen("start-game");
   }
 
-  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_context_TimerContext__WEBPACK_IMPORTED_MODULE_10__["TimerProvider"], {
+  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_context_TimerContext__WEBPACK_IMPORTED_MODULE_11__["TimerProvider"], {
     value: _objectSpread({}, timer, {
       startTimer: startTimer,
       stopTimer: stopTimer,
       timeElapsed: timeElapsed
     })
-  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_context_PlayerContext__WEBPACK_IMPORTED_MODULE_11__["PlayerProvider"], {
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_context_PlayerContext__WEBPACK_IMPORTED_MODULE_12__["PlayerProvider"], {
     value: _objectSpread({}, player, {
       move: move,
       setName: setName
@@ -62770,6 +62781,11 @@ function App() {
   }), screen === "game" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_GameScreen__WEBPACK_IMPORTED_MODULE_5__["default"], null), screen === "coffee-machine" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_CoffeeMachineScreen__WEBPACK_IMPORTED_MODULE_8__["default"], {
     updateDrink: updateDrink,
     onComplete: function onComplete() {
+      return setScreen("game");
+    }
+  }), screen === "checkout" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_CheckoutScreen__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    drink: drink,
+    onPaid: function onPaid() {
       return setScreen("game");
     }
   }), screen === "leaderboard" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_LeaderboardScreen__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -62812,6 +62828,71 @@ if (token) {
 } else {
   console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+/***/ }),
+
+/***/ "./resources/js/components/CheckoutScreen.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/CheckoutScreen.js ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function CheckoutScreen(_ref) {
+  var drink = _ref.drink,
+      onPaid = _ref.onPaid;
+
+  function pay() {
+    onPaid();
+  }
+
+  var graphics = {
+    'COF': '/img/payhere-black-coffee.png',
+    'TEA': '/img/payhere-black-tea.png',
+    'CAP': '/img/payhere-cappuccino.png',
+    'LAT': '/img/payhere-cafe-latte.png',
+    'ESP': '/img/payhere-espresso.png',
+    'CHO': '/img/payhere-chocolate.png',
+    'MOC': '/img/payhere-mocha.png'
+  };
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    className: "mb-6 mx-auto w-24",
+    src: "/img/logo.png"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "px-4"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "max-w-xl mx-auto"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "bg-white py-6 px-4"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+    className: "text-center text-sm mb-6"
+  }, "HOW ARE YOU PAYING?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "flex"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "w-1/2 pr-2"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    src: graphics[drink]
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "pl-2 text-white text-xs w-1/2"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "bg-orange flex h-8 items-center justify-center mb-3 text-center text-shadow-dark-orange shadow-button-orange w-full focus:outline-none",
+    onClick: pay
+  }, "CASH"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "bg-orange flex h-8 items-center justify-center mb-3 text-center text-shadow-dark-orange shadow-button-orange w-full focus:outline-none",
+    onClick: pay
+  }, "CONTACTLESS"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "bg-orange flex h-8 items-center justify-center mb-3 text-center text-shadow-dark-orange shadow-button-orange w-full focus:outline-none",
+    onClick: pay
+  }, "CHIP & PIN")))))));
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (CheckoutScreen);
 
 /***/ }),
 
@@ -63505,30 +63586,32 @@ function block() {
 
 function coffee() {
   return tile({
-    type: 'coffee-machine',
-    className: 'bg-red-500'
+    type: 'coffee-machine'
   });
 }
 
 function enter() {
   return tile({
-    type: 'entrance',
-    className: "bg-pink-500"
+    type: 'entrance'
   });
 }
 
 function exit() {
   return tile({
-    type: 'exit',
-    className: "bg-blue-500"
+    type: 'exit'
   });
 }
 
-var tiles = [[shelf(), shelf(), coffee(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf()], [shelf(), tile(), tile(), tile(), tile(), block(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), tile(), shelf()], [shelf(), tile(), shelf(), block(), shelf(), tile(), shelf(), block(), shelf(), tile(), shelf(), tile(), tile(), shelf(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), shelf(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), shelf()], [shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), shelf(), shelf(), block(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), shelf(), tile(), shelf(), tile(), tile(), shelf(), tile(), shelf()], [shelf(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), tile(), shelf()], [shelf(), block(), shelf(), block(), shelf(), tile(), shelf(), block(), shelf(), block(), shelf(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), tile(), shelf()], [shelf(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), tile(), tile(), tile(), shelf()], [shelf(), shelf(), shelf(), exit(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), enter(), shelf(), shelf(), shelf()]];
+function checkout() {
+  return tile({
+    type: 'checkout'
+  });
+}
+
+var tiles = [[shelf(), shelf(), coffee(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf()], [shelf(), tile(), tile(), tile(), tile(), block(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), tile(), shelf()], [shelf(), tile(), shelf(), block(), shelf(), tile(), shelf(), block(), shelf(), tile(), shelf(), tile(), tile(), shelf(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), shelf(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), shelf()], [shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), shelf(), shelf(), block(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), shelf(), tile(), shelf(), tile(), tile(), shelf(), tile(), shelf()], [shelf(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), tile(), shelf()], [shelf(), block(), shelf(), block(), shelf(), checkout(), shelf(), block(), shelf(), block(), shelf(), tile(), tile(), tile(), tile(), shelf()], [shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), tile(), shelf(), shelf(), tile(), shelf()], [shelf(), tile(), tile(), tile(), tile(), tile(), tile(), tile(), shelf(), tile(), tile(), tile(), tile(), tile(), tile(), shelf()], [shelf(), shelf(), shelf(), exit(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), shelf(), enter(), shelf(), shelf(), shelf()]];
 
 function getCoordinates(type) {
   return tiles.map(function (cols, row) {
-    var col = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["findIndex"])(cols, ['type', type]);
     return {
       x: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["findIndex"])(cols, ['type', type]),
       y: row
@@ -63544,7 +63627,8 @@ var MazeContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({
   entrance: getCoordinates('entrance'),
   exit: getCoordinates('exit'),
   coffeeMachine: getCoordinates('coffee-machine'),
-  traversableTiles: ['tile', 'entrance', 'exit', 'coffee-machine']
+  checkout: getCoordinates('checkout'),
+  traversableTiles: ['tile', 'entrance', 'exit', 'coffee-machine', 'checkout']
 });
 var MazeProvider = MazeContext.Provider;
 var MazeConsumer = MazeContext.Consumer;
