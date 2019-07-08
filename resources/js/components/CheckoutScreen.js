@@ -22,7 +22,7 @@ function CheckoutScreen({ drink, onPaid }) {
                 <div className="max-w-xl mx-auto">
                     <div className="bg-white py-6 px-4">
                     <h2 className="text-center text-sm mb-6">
-                        HOW ARE YOU PAYING?
+                        THAT'LL BE <span className="text-orange">£2.45</span>. HOW HOW WOULD YOU LIKE TO PAY?
                     </h2>
 
                     <div className="flex">

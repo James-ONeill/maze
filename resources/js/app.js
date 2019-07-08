@@ -35,7 +35,7 @@ function App() {
     useEffect(() => {
         window.addEventListener('focus', () => {
             if (screen === 'game') {
-                themeAudio.play();
+                // themeAudio.play();
             }
 
             if (screen === 'leaderboard' && latestTime != null) {
@@ -183,6 +183,8 @@ function App() {
             newPlayer.x == maze.checkout.x &&
             newPlayer.y == maze.checkout.y
         ) {
+            coffeeMachineAudio.load();
+            coffeeMachineAudio.play();
             setScreen("checkout");
             setPlayer({ ...newPlayer, direction });
             playerAnimating();
@@ -198,8 +200,8 @@ function App() {
             newPlayer.hasCompleted = true;
             stopTimer();
             showLeaderboard();
-            themeAudio.pause();
-            endThemeAudio.play();
+            // themeAudio.pause();
+            // endThemeAudio.play();
         }
 
         playerAnimating();
